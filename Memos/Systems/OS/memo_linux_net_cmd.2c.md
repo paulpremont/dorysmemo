@@ -977,6 +977,27 @@ Accès à un hôte distant
 
                             > ssh login@IP  :  se connecter sur un server ssh
 
+#### Génération d'une clé SSH (coté client)
+
+Attention à bien se mettre à jour côté algorithmes de chiffrement.
+
+Sources : https://tutox.fr/2020/04/16/generer-des-cles-ssh-qui-tiennent-la-route/
+
+Algos :
+
+* ~~DSA -> à proscrire, ça n’est plus supporté depuis openssh v7~~
+*  RSA -> éprouvé et conseillé avec une taille de clé de 4096 bits. Compatible partout.
+*  ECDSA -> Conseillé par l’ANSSI mais a priori n’a pas la confiance de tout le monde
+*  ED25519 -> le dernier arrivé et le meilleur en termes de sécu et de performance (distributions récentes).
+
+Passable :
+
+  ssh-keygen -t rsa -b 4096
+
+Préférons : 
+
+  ssh-keygen -t ed25519
+
 
                         Connexion auto (coté client)
                         ``````````````````````

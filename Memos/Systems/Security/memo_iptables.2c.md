@@ -769,3 +769,19 @@ Protection basique :
   - via l'installation du paquet iptables-persistent
 
   ou en lançant le script au démarrage (avec systemd par exemple).
+
+## iptables-legacy
+
+Depuis les dernières versions d'ubuntu, au moins à partir de la 21.10
+
+Le firewall installé est ufw. C'est une surcouche simplifiée mais ne permettant pas de faire du firewalling avancé.
+Sinon nftables a remplacé iptables (via la commande iptables) et l'ancien iptables est paramétrable via iptables-legacy.
+
+Pour passer à nftables, voici une possibilité
+
+Lien : https://www.liquidweb.com/kb/how-to-install-nftables-in-ubuntu/
+
+```
+iptables-restore-translate -f iptables-rules.txt > iptables-nft.rules
+
+```
