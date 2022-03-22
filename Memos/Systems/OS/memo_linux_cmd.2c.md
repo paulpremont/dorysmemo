@@ -1790,7 +1790,7 @@ Utilisateurs
                     Il corresponde au caractère t ou à la valeur numérique 1000 ou encore T si les droits d'éxécution ne sont pas définis sur le fichier.
 
                     -Sur un fichier executable, il sert à garder le programme en mémoire vive (empechera l'écriture sur le SWAP par exemple)
-                    Ceci apporte une notion de priorité dans un besoin d'éxécution ultèrieur.
+                    Permet d'executer plus rapidement par la suite. (Stockage en mémoire). 
 
                     -Sur un Répertoire, seul le propriétaire d'un fichier pourra supprimer ses fichiers.
                     Il est présent par défaut sur /tmp, ainsi chaque user peut écrire dans /tmp sans qu'une autre personne puisse supprimer son dossier.
@@ -1801,7 +1801,6 @@ Utilisateurs
                 Droits d'endossement
                 `````````````````
                     http://www.linuxnix.com/2011/12/sgid-set-sgid-linuxunix.html
-                    http://www.linuxnix.com/2011/12/suid-set-suid-linuxunix.html
 
                     But:
 
@@ -1842,16 +1841,44 @@ Utilisateurs
                             s : sur un fichier executable.
                             S : sur un fichier non executable.
 
-                Récapitulatif sur les droits:
+                Récapitulatif sur les droits :
                 `````````````````
+                  Source : https://www.it-connect.fr/les-droits-sous-linux/
 
-                    1 (x) sur un dossier permet de l'ouvrir. (exemple avec cd)
-                    2 (w) sur un dossier permet de contrôler lui et son contenu. (exemple avec rm et mv)
-                    4 (r) sur un dossier permet de lister son contenu. (exemple avec ls)
+**Pour les fichiers :**
 
-                    1 (x) sur un fichier permet de l'éxécuter. (exemple avec bash)
-                    2 (w) sur un fichier permet de le modifier. (exemple avec nano)
-                    4 (r) sur un fichier permet de le consulter. (exemple avec cat)
+    r (4) : Lecture - Permet de lire, ouvrir, visualiser (ex : cat)
+    w (2) : Écriture - Permet de modifier le fichier (ex : >, >>, nano)
+    x (1) : Exécution - Autorise l'utilisateur à exécuter le fichier (ex : bash)
+    s : SetUID - Exécution avec les droits du propriétaire (ex : /bin/mount)
+    s : SetGID - Exécution avec les droits du groupe (ex : /usr/bin/crontab)
+    t : sticky bit - Mise en zone de swap (ex : /dev/mem,)
+    + : correspond au positionnement d'ACL
+
+**Pour les dossiers :**
+
+    r (4) : Lecture - Permet de lire le contenu du dossier (ex : ls)
+    w (2) : Écriture - Permet de modifier le contenu du dossier (ex : cp, mv , rm)
+    x (1) : Exécution - Autorise l'utilisateur à ouvrir le dossier (ex : cd)
+    s : SetUID - N'est pas utilisé sous UNIX => sans effet
+    s : SetGID - Permet aux sous/fichiers d'hériter des droits du dossier parent (ex : /usr/local)
+    t : sticky bit - Tout fichier crée ne pourra être supprimé que par son propriétaire et par root. (ex : /tmp)
+    + : correspond au positionnement d'ACL
+
+                __________________
+                $setfacl getfacl : gestion des droits de manière plus "fine"
+
+                  $ apt-get install acl
+
+                  CF : https://debian-facile.org/doc:systeme:acl
+
+                  Nécessite un FS qui supporte les acl (ext4...)
+
+                  $ getfacl monFichier : obtenir la liste des acl sur un fichier/dossier
+
+                  Exemple d'attribution de droits par défaut :
+
+                  $ setfacl -R -m d:g:monGroupe:rwx monRep
 
                 __________________
                 $umask : affiche le masque de l'utilisateur actif
