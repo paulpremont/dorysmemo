@@ -954,7 +954,6 @@ Accès à un hôte distant
         --------------------------------------
         Connexion avec un hôte:
         --------------------------------------
-
                 ______________________________
                 $ssh : connexion avec un hôte distant via ssh ;)
 
@@ -963,7 +962,7 @@ Accès à un hôte distant
                         -v : permet d'afficher toutes les infos de connexion (clé utilisée ...)
 
 
-                        Install:
+                        Install :
                         ``````````````````````
 
                             > apt-get install openssh-server  # Pour être en mode serveur (écouter sur le port 22)
@@ -972,7 +971,7 @@ Accès à un hôte distant
                             > /etc/init.d/ssh reload  :  démarrer/ redémarrer... le démon.
 
 
-                        Connexion Manuelle:
+                        Connexion Manuelle :
                         ``````````````````````
 
                             > ssh login@IP  :  se connecter sur un server ssh
@@ -1056,12 +1055,31 @@ Préférons :
                             > ssh-add  :  permet de rentrer sa passphrase (si activée) et de la mémoriser.
 
 
-                        Lancer une appli graphique distante:
+                        Lancer une appli graphique distante :
                         ``````````````````````
 
                             > export DISPLAY=:0.0    : Lancer en mode graph un soft sur une machine distante
 
+                        
+#### Afficher les applications en mode graphique sur son poste :
 
+Link : https://www.xmodulo.com/how-to-enable-x11-forwarding-using-ssh.html
+
+```
+# Côté serveur
+apt-get install xauth
+
+vim /etc/ssh/sshd_config
+  X11Forwarding yes
+
+# Côté client
+vim $HOME/.ssh/config file
+  ForwardX11 yes
+
+ssh -X user@remote_server
+```
+
+Note : il est également possible (over ssh) de se rdp sur le poste.
 
                         Conf perso: ~/.ssh/config (client)
                         ``````````````````````
