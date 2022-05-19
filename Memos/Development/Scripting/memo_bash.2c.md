@@ -639,6 +639,8 @@ Groupement de commandes {}
 Les conditions && tests
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Link : https://buzut.net/maitriser-les-conditions-en-bash/
+
 	-----------------------------------------
 	Commande test
 	-----------------------------------------
@@ -661,17 +663,20 @@ Les conditions && tests
 			[ ... ]
 			Il faut respécter l'espace avant et après les crochets.
 
-		Une autre syntaxe peut être utilisée: [[ ]]
+		Une autre syntaxe peut être utilisée: [[ ]] 
+    (non compatible avec sh)
 
-			Les doubles crochets permettent d'assouplir l'interprétation du test et apporte des éléments d'interprétation plus "logique".
-			Cette syntaxe est à préviligié car elle est plus récente et peut résoudre pas mal de bug.
+  Les doubles crochets permettent d'assouplir l'interprétation du test et apporte 
+  des éléments d'interprétation comme les wildcards.
+
+	Cette syntaxe est à priviligier car elle est plus récente et peut résoudre pas mal de bug.
 
 				-Evaluation arithmétique des constantes octales et hexa
 				-Evaluation des opérateurs logiques && || < et >
 				-Permet de reconnaître l'opérateur =~ pour les Regex.
 				-Autocomplétion des variables ... (évite de mettre des "")
 
-			La syntaxe des doubles crochets apporte donc beaucoup plus de soupless:
+	La syntaxe des doubles crochets apporte donc beaucoup plus de souplesse :
 
 		Note: il est possible d'enchainer les test dans des simple corchets avec -o (OU) et -a (AND)
 
@@ -680,8 +685,8 @@ Les conditions && tests
 
 			[ ]				vs		[[ ]]
 
-		[ "$coucou" == "coucou" ]		vs	[[ $coucou == "coucou" ]]
-		[ "$a" == "$a" -a "$b" == "$b" ]	vs 	[[ $a == $a && $a == $a ]]
+		[ $coucou = "coucou" ]		vs	[[ $coucou == "coucou" ]]
+		[ "$a" = "$a" -a "$b" = "$b" ]	vs 	[[ $a == $a && $a == $a ]]
 		[ "$a" =~ regex ] 	#impossible	vs 	[[ $a =~ regex ]]
 		[ "0x0f" -eq "15" ] 	#faut		vs	[[ "0x0f" -eq "15" ]] #vrai
 
