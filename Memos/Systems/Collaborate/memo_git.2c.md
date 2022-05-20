@@ -80,6 +80,13 @@ Configuration
                     > git config --global credential.helper cache
                     > git config --global credential.helper 'cache --timeout=3600'
 
+                #Pour garder en mémoire les credentials :
+
+                   > git config --global credential.helper store
+                   > ls ~/.git-credentials
+
+                   Attention car stock en clair les infos de connexion
+
                 #Ssh :
 
                     Config habituel d'un client ssh.
@@ -476,6 +483,15 @@ et client :
 voir **.git/hooks**
 
 Voir le tableau
+
+
+### Utilisation d'un proxy socks :
+
+Exemple :
+
+```
+ALL_PROXY=socks5://127.0.0.1:8080 git $ARGS'
+```
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 Troubleshooting
