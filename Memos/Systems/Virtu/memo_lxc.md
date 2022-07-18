@@ -163,13 +163,18 @@ Créer un conteneur à partir d'un modèle :
 
     lxc-create -n NOM_CONTENEUR -t MON_TEMPLATE
 
-Exemple :
+Exemples :
 
+    lxc-create -t download -n test -- -d debian -r bullseye -a amd64
     lxc-create -n fooct -t download #mode interactif
     lxc-create -n fooct2 -t debian
 
 !!! note
     Pour pouvoir installer un conteneur en mode interactif, il faudra passer par le template "download"
+
+!!! passer en mode interractif en cas d'erreur avec un template téléchargé
+    (Voir : https://github.com/lxc/lxc/issues/1799)
+    Exemple : lxc-create -t download -n test -- -d debian -r stretch -a arm64
 
 #### Copier un conteneur existant :
 
