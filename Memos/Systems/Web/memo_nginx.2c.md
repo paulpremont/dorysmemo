@@ -370,6 +370,7 @@ PHP
 
                 Dans tout les ca spawn-fcgi, php5-fpm servent à gérer les processus FCGI de façon optimale.
 
+
         ----------------------
         par spawn-fcgi
         ----------------------
@@ -677,3 +678,33 @@ Passenger
                 > ps faux |grep -i passenger
 
 
+
+## Quick install
+
+```bash
+# NGINX :
+apt install nginx
+systemctl start nginx
+systemctl enable nginx
+
+# PHP + modules :
+apt install php php-fpm php-cli php-mysql php-curl php-json
+php --version
+systemctl start php7.4-fpm
+systemctl enable php7.4-fpm
+
+# config example :
+vim /etc/nginx/sites-available/example
+
+server {
+        listen 80;
+        server_name test.example.com;
+        root /var/www/html;
+        index info.php;
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+    }
+}
+```

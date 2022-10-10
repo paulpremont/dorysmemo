@@ -17,6 +17,7 @@ Links
 ### Tutos
 
 * [Guide OVH](http://guides.ovh.com/FireWall)
+* [DDoS Protection](https://javapipe.com/blog/iptables-ddos-protection/)
 
 How it works ?
 -----------------------------
@@ -65,6 +66,8 @@ Ces 2 softs font patie intégrante du même framework (d'autres en font partie).
 
 ### Schéma
 
+```
+
                     Paquets entrant sur le noeud
                              |
                              v
@@ -75,27 +78,28 @@ Ces 2 softs font patie intégrante du même framework (d'autres en font partie).
                            ROUTING
                              |	(Applique la décision de routage)
                      ________|_______
-                    |		            |
-                    |		            |
-                    v		            |
+                    |               |
+                    |	              |
+                    v 	            |
                  I N P U T          |
     (flux à destination de l'hôte)  |
-                    |		            |
+                    |	              |
                     |            F O R W A R D
-                    v		            | (Pour la redirection de paquet)
-                 Système 		        | (Fonction de routage)
+                    v	              | (Pour la redirection de paquet)
+                 Système 	          | (Fonction de routage)
                (local process)      |
-                    |		            |
-                    v		            |
-                 O U T P U T		    |
+                    |	              |
+                    v	              |
+                 O U T P U T        |
                   (flux sortant)    |
-                    |		            |
+                    |	              |
                     v               v
                     P O S T R O U T I N G
                       | (Règles appliquées après le routage du paquet)
                       |
                       v Paquets qui sortent du noeud
 
+```
 
 ### Les Options
 
