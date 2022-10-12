@@ -74,14 +74,28 @@ Le tunnel SSH est monté entre votre pc client et le server. Ce tunnel chiffrera
 Pour plus de détail sur le fonctionnement des tunnels, allez voir dans la partie memo_linux_network :).
 
 
-Coté serveur:
+## Coté serveur:
 
-	> apt-get install openssh-server #Si ce n'est pas déja fait :p
-	
-	Je n'ai ensuite pas eu de configuration préalable à faire coté serveur
+1. Installation du serveur ssh :
 
+  apt-get install openssh-server #Si ce n'est pas déja fait :p
+  #apt-get install fail2ban (optionnel)
 
-Coté client: 
+2. Création d'un utilisateur pour la connexion proxy :
+
+  adduser bidul #optionnel, mais pour plus de sécurité n'autorisez pas les connexions via root
+  #Préférez un utilisateur sans droits (sinon : usermod -aG sudo bidul)
+
+3. Ajustement de la configuration du serveur :
+
+  vim /etc/ssh/sshd_config
+  #changer le Port (utilsier un port classique pour renforcer ses chances d'ouverture au niveau des FW, ex : 80/443...)
+  #Port 443
+  #PermitRootLogin no
+  #PasswordAuthentication no
+  systemctl restart ssh
+
+## Coté client (openssh)
 
 	Automatisez votre connexion ssh (sinon c'est chiant)
 
@@ -111,7 +125,7 @@ Coté client:
 
 	 --> you win, le tunnel est créer, il faut maintenant y faire passer vos requêtes web.
 
-	 Je prend en exemple firefox pour la config car c'est sur ce browser que j'ai fait mes tests:
+	 Je prends en exemple firefox pour la config car c'est sur ce browser que j'ai fait mes tests:
 
 	 Dans Edit/Préférences/Advanced/Network/Settings
 
@@ -148,11 +162,16 @@ Coté client:
 	Vous pouvez toujours vérifier avec un tcpdump que vos requêtes DNS ne passent pas en clair.
 
 	Voir du coté de tsocks pour ne pas configurer vos clients. 
+	(Sinon s'amuser à rediriger le flux)
 
-	todo
+	-> TODO
 
-	Sinon s'amuser à rediriger le flux 
+## Avec putty
 
+CF internet, exemples : 
+
+- [Utiliser une clé avec Putty](https://devops.ionos.com/tutorials/use-ssh-keys-with-putty-on-windows/)
+- [Tunnel SSH dynamique avec Putty](https://www.linuxbabe.com/firewall/ssh-dynamic-port-forwarding)
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Par VPN

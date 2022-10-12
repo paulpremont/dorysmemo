@@ -1313,11 +1313,9 @@ Pour éviter ce problème, mieux vaut utiliser le ssh agent forwarding.
 
                                 Un tunnetl ssh over http/https proxy avec SOCKS.
 
-                                Par exemple avec nginx:
-
                             Autres solutions ?
 
-                                ...
+                                ...a documenter
 
                         Issues
                         ``````````````````````
