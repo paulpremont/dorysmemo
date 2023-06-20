@@ -12,12 +12,13 @@ Links
 
 ### Official
 
-* [NetFilter](http://www.netfilter.org/)
+- [NetFilter](http://www.netfilter.org/)
+- [Ubuntu/iptables](https://doc.ubuntu-fr.org/iptables)
 
 ### Tutos
 
-* [Guide OVH](http://guides.ovh.com/FireWall)
-* [DDoS Protection](https://javapipe.com/blog/iptables-ddos-protection/)
+- [Guide OVH](http://guides.ovh.com/FireWall)
+- [DDoS Protection](https://javapipe.com/blog/iptables-ddos-protection/)
 
 How it works ?
 -----------------------------
@@ -677,8 +678,99 @@ Exemple de script:
             #KEEP CONNECTION
             echo 'keep connection'
 
-            $cmd -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
-            #$cmd -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+            $cmd -A INPUT -m conntrack --ctstate ESTABLISHED -j ACCEPT
+            #$cmd -A INPUT -m state --state ESTABLISHED -j ACCEPT #old syntax
+
+            $cmd -A OUTPUT -m conntrack ! --ctstate INVALID -j ACCEPT
+            #$cmd -A OUTPUT -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT #old syntax
+
+            #MULTICAST
+
+            #$cmd -A INPUT -m pkttype --pkt-type multicast -j ACCEPT
+
+
+## Exemple Ubuntu pour protéger son PC
+
+- source : https://doc.ubuntu-fr.org/iptables#script_iptables
+
+``` bash
+#!/bin/bash
+
+iptables-restore < /etc/iptables.test.rules
+
+## Script iptables by BeAvEr.
+
+## Règles iptables.
+
+## On flush iptables.
+
+iptables -F
+iptables -X
+iptables -t nat -F
+iptables -t nat -X
+iptables -t mangle -F
+iptables -t mangle -X
+
+## On drop les requêtes ICMP (votre machine ne répondra plus aux requêtes ping sur votre réseau local).
+
+iptables -A INPUT -p icmp --icmp-type echo-request -j DROP
+
+## On accepte le Multicast.
+
+iptables -A INPUT -m pkttype --pkt-type multicast -j ACCEPT
+
+## On drop tout le trafic entrant.
+
+iptables -P INPUT DROP
+
+## On drop tout le trafic sortant.
+
+iptables -P OUTPUT DROP
+
+## On drop le forward.
+
+iptables -P FORWARD DROP
+
+## On drop les scans XMAS et NULL.
+
+iptables -A INPUT -m conntrack --ctstate INVALID -p tcp --tcp-flags FIN,URG,PSH FIN,URG,PSH -j DROP
+
+iptables -A INPUT -m conntrack --ctstate INVALID -p tcp --tcp-flags ALL ALL -j DROP
+
+iptables -A INPUT -m conntrack --ctstate INVALID -p tcp --tcp-flags ALL NONE -j DROP
+
+iptables -A INPUT -m conntrack --ctstate INVALID -p tcp --tcp-flags SYN,RST SYN,RST -j DROP
+
+## Dropper silencieusement tous les paquets broadcastés.
+
+iptables -A INPUT -m pkttype --pkt-type broadcast -j DROP
+
+## Permettre à une connexion ouverte de recevoir du trafic en entrée.
+
+iptables -A INPUT -m conntrack --ctstate ESTABLISHED -j ACCEPT
+
+## Permettre à une connexion ouverte de recevoir du trafic en sortie.
+
+iptables -A OUTPUT -m conntrack ! --ctstate INVALID -j ACCEPT
+
+## On accepte la boucle locale en entrée.
+
+iptables -I INPUT -i lo -j ACCEPT
+
+## On log les paquets en entrée.
+
+iptables -A INPUT -j LOG
+
+## On log les paquets forward.
+
+iptables -A FORWARD -j LOG
+
+exit 0
+```
+
+## Permettre à une connexion ouverte de recevoir du trafic en sortie.
+
+iptables -A OUTPUT -m conntrack ! --ctstate INVALID -j ACCEPT
 
         #----------------- FORWARD ------------------------
         echo 1 > /proc/sys/net/ipv4/ip_forward
@@ -779,6 +871,7 @@ Protection basique :
 Depuis les dernières versions d'ubuntu, au moins à partir de la 21.10
 
 Le firewall installé est ufw. C'est une surcouche simplifiée mais ne permettant pas de faire du firewalling avancé.
+
 Sinon nftables a remplacé iptables (via la commande iptables) et l'ancien iptables est paramétrable via iptables-legacy.
 
 Pour passer à nftables, voici une possibilité

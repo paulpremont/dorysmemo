@@ -155,10 +155,18 @@ Nettoyer le cache arp :
 	------------------
 
 		_________________
-		Attribuer une IP
+		Attribuer une IP temporaire :
+
+    Note : le network manager risque de surchager les paramètres.
+    Il est conseillé de le désactiver pour que la configuration puisse rester le
+    temps de la session de travail.
 
 			> ifconfig <interface> <ip> netmask <mask>
 			> ifconfig <interface:sous_interface> <IP>/<Mask> up
+
+      Sources : https://ubuntu.com/server/docs/network-configuration
+
+      ip addr add <ip>/<mask> dev <interface>
 		_________________
 		Réinitialiser une IP
 

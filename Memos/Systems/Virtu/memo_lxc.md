@@ -167,7 +167,6 @@ Exemples :
 
     lxc-create -t download -n test -- -d debian -r bullseye -a amd64
     lxc-create -n fooct -t download #mode interactif
-    lxc-create -n fooct2 -t debian
 
 !!! note
     Pour pouvoir installer un conteneur en mode interactif, il faudra passer par le template "download"
