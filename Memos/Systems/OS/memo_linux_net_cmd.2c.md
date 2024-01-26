@@ -1003,7 +1003,7 @@ Passable :
 
 Préférons : 
 
-  ssh-keygen -t ed25519
+  ssh-keygen -t ed25519 -a 100 (source : https://medium.com/risan/upgrade-your-ssh-key-to-ed25519-c6e8d60d3c54)
 
 
                         Connexion auto (coté client)
