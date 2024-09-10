@@ -855,8 +855,14 @@ VLAN
 	TRUNK (se fait au niveau du switch)
 	------------------------
 
-	Le trunk chez cisco (à ne pas confondre avec les autres constructeurs) permet de faire transiter sur un seul lien plusieurs vlan, on économise ainsi des ports du switch. 
+	Le trunk chez cisco (à ne pas confondre avec les autres constructeurs qui peuvent parler de LAG) permet de faire transiter sur un seul lien plusieurs vlan, on économise ainsi des ports du switch. 
 	Note: il faudra configurer sur le routeur une sous-interface pour chaque vlan.
+
+  Source : https://www.reseaucerta.org/sites/default/files/VLAN_5.pdf
+
+  "Remarque : dans la terminologie CISCO un lien trunk correspond à un lien étiquetée alors que pour la
+plupart des autres constructeurs un lien trunk correspond à une agrégation de liens (notamment chez
+Allied-Telesyn et HP) Une agrégation de liens chez CISCO est un Etherchannel."
 
 
 		(config-if)#	switchport trunk encapsulation dot1q
