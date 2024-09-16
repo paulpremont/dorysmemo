@@ -41,7 +41,14 @@ on peut executer un script avec différentes options:
             set -o errexit
             set -o xtrace
 
-        Some options :
+  Note : un script est executé dans un "sous-shell"
+
+  Si l'on souhaite que le script soit executé dans le schell courant,
+  il est possible d'utiliser la syntaxe suivante :
+
+  ```
+  . ./monscript.sh
+  ```
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 autocompletion
