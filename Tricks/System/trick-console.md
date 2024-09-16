@@ -52,7 +52,7 @@ Exemple avec putty :
 Exemple avec un switch Omada :
 
 * /dev/ttyS0
-* Speed : 34800
+* Speed : 38400
 
 ## Sources
 
