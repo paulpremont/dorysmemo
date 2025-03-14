@@ -2,10 +2,11 @@
 
 ## Sources
 
-- https://www.youtube.com/watch?v=uORbJS9bp54
-- https://www.youtube.com/watch?v=WIDO5F0myj0
+- 3x3 : https://www.youtube.com/watch?v=uORbJS9bp54
+- 3x3 : https://www.youtube.com/watch?v=WIDO5F0myj0
+- 2x2 : https://www.youtube.com/watch?v=CYycCxzMrsU
 
-## Déroulé
+## Rubiks 3x3
 
 0. Algos principaux :
 
@@ -15,6 +16,8 @@
 1. Marguerite
 
   * Former une Marguerite : centre jaune et 4 pétales blanc sur chaque côté
+
+*Note : avec uniquement le U et quelques R ou L il est possible de réaliser cette étape*
 
 2. Croix Blanche
 
@@ -29,7 +32,7 @@
   * Placer ce coin entre les deux couleurs dont les centres correspondent (le mettre dans sa main droite)
   * Envoyer le coin en bas dans le bon ordre (couleur sur couleur) en répétant :
   
-    RUR'U'
+    RU R'U'
     
 4. Deuxième ligne de même couleur
 
@@ -42,13 +45,13 @@
     
       On place la face de gauche en face de soit puis :
      
-      U RUR'U' > changement de côté (face droite) > L'U'L
+      U RU R'U' > changement de côté (face droite) > L'U'L
   
     - L'arrête est à droite
     
       On place la face de droite en face de soit puis :
       
-      U' L'U'LU > change de côté (face gauche) > RUR'
+      U' L'U' LU > change de côté (face gauche) > RUR'
       
    * Note si une des arrêtes correspond est inversée, il suffit d'y insérer une arrête (haut) jaune à la place avec la même formule.
       
@@ -57,7 +60,9 @@
   * Se placer sur une face jusqu'à obtenir une ligne.
     Lorsqu'une ligne est faite se mettre sur l'autre face pour former une deuxième ligne :
   
-    F RUR'U' F'
+    F RU R'U' F'
+
+*Note : il est possible d'enchaîner plusieurs sexy move avant de refaire un F' de fin*
     
 6. Arrêtes jaune :
 
@@ -66,7 +71,7 @@
     - Si deux couleurs déjà bien placées, mettre une bonne couleur derrière et l'autre à sa droite
     - Si deux couleurs opposées, mettre une bonne couleur devant soit
     
-    RUR'U  R U'U'R'
+    RU R'U  R U'U'R'
     
 7. Coins jaunes :
 
@@ -75,7 +80,7 @@
     - Garder la même couleur entre face et arrête et trouver un coin qui est bien placé
   * Faire cet algo en gardant à sa droite un coin bien placé jusqu'à ce que tous les coins soient biens placés :
 
-    L' UR U' LU R'
+    L' URU' LU R'
     
 8. Finir le cube
 
@@ -84,6 +89,28 @@
   * Bien garder la même face et tourner uniquement le bas jusqu'à placer un nouveau coin puis refaire l'aglo
     (Faire l'algo complet jusqu'à placer le coin jaune correctement)
   
-    RUR'U'
+    RU R'U'
     
   
+## Rubiks 2x2
+
+Même exercice que le 3x3 mais sans les étapes concernant les arrêtes (uniquement les coins)
+
+1. Compléter une face 
+
+  * En utilisant l'algo principal constituer une face avec toutes les couleurs bien placées :
+
+    RU R'U'
+
+2. Placer les coins
+
+  * Pour placer les coins en mettant soit deux coins biens placés à l'arrière ou
+  si deux en diagonal, mettre un des coins sur sa droite.
+
+  [UR] [U'L'] [UR'] [U'L]
+  [URU'] [L'UR'U'L]
+
+3. Finir le cube
+
+  * De la même manière que le 3x3
+
