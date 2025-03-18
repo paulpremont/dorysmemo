@@ -108,6 +108,7 @@ Même exercice que le 3x3 mais sans les étapes concernant les arrêtes (uniquem
   si deux en diagonal, mettre un des coins sur sa droite.
 
   [UR] [U'L'] [UR'] [U'L]
+
   [URU'] [L'UR'U'L]
 
 3. Finir le cube
