@@ -57,10 +57,13 @@
       
 5. Croix jaune :
 
+  * Face jaune sur le dessus
   * Se placer sur une face jusqu'à obtenir une ligne.
     Lorsqu'une ligne est faite se mettre sur l'autre face pour former une deuxième ligne :
   
     F RU R'U' F'
+
+  * Si un L jaune est formé, le garder dans le coin supérieur gauche (L inversé).
 
 *Note : il est possible d'enchaîner plusieurs sexy move avant de refaire un F' de fin*
     
