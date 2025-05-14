@@ -43,6 +43,15 @@ L'API peut être pilotées depuis plusieurs langages comme :
 * Ruby
 * ...
 
+## Installation rapide
+
+```
+sudo apt install lxc
+sudo lxc-create -n NomConteneur -t download
+sudo lxc-start -n NomConteneur
+sudo lxc-attach -n NomConteneur
+```
+
 Installation
 -----------------------------
 
@@ -52,7 +61,7 @@ Installation
 ### Depuis les sources:
     git clone git://github.com/lxc/lxc
 
-Configuration
+Configuration (optionel)
 -----------------------------
 
 ### Préparation de l'hôte
