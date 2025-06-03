@@ -1,49 +1,119 @@
-=========================================================
-                W O R D P R E S S
-=========================================================
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Créer sa base de données
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# MEMO WORDPRESS
 
-	-------------------------
-	Mysql
-	-------------------------
+## Sources
 
-                > mysql -uroot -p
-                        #Création de la base
-                
-                        CREATE DATABASE Ma_Base;
+- [Wordpress download](https://fr.wordpress.org/download/)
+- [Wordpress hosting](https://wordpress.org/documentation/article/hosting-wordpress/)
+- [Wordpress forum install](https://wordpress.org/support/forum/installation/)
+- [Tuto hostinger](https://www.hostinger.com/fr/tutoriels/wordpress-nginx)
 
-                        #Création de l'utilisateur
+## Installation
 
-                        GRANT ALL PRIVILEGES ON Ma_Base.* TO 'USER'@'HOSTNAME' IDENTIFIED BY 'PASSWORD' WITH GRANT OPTION
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Mise en place du wordpress:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Installation des paquets :**
 
-        > wget http://wordpress.org/latest.tar.gz
+```
+apt install nginx mariadb-server wget
+```
 
-	-------------------------
-	Décompression de l'archive
-	-------------------------
+**Installation de wordpress :**
 
-                > tar -zxvf latest.tar.gz -C /path/to/decompress
+```
+wget https://wordpress.org/latest.tar.gz
+tar -zxvf latest.tar.gz -C /var/www
+chown -R www-data: wordpress/
+```
 
-	-------------------------
-	Configuration:
-	-------------------------
+**Sécurisation de la base de données :**
 
-                > cp wp-config-sample.php wp-config.php
-                > vim wp-config.php
+```
+sudo mysql_secure_installation
+```
 
-                        #Modifiez la valeur des champs du fichier:
+**Création de la base :**
 
-                        define('DB_NAME', 'votre_nom_de_bdd');
-                        define('DB_USER', 'votre_utilisateur_de_bdd');
-                        define('DB_PASSWORD', 'votre_mdp_de_bdd');
+```
+mysql -uroot -p
+#press enter if no password set
 
-                Plus qu'à se connecter sur sa page :)
+CREATE DATABASE wp;
+GRANT ALL PRIVILEGES ON wp.* TO 'wpuser'@'localhost' IDENTIFIED BY 'F00P@ssw0rd' WITH GRANT OPTION;
+show databases;
+exit
+```
+
+**Installation php :**
+
+Installation des paquets php (version à adapter, faire un search avant pour voir quelle version est disponibble)
+
+```
+sudo apt install php8.2-cli php8.2-fpm php8.2-mysql php8.2-opcache php8.2-mbstring php8.2-xml php8.2-gd php8.2-curl
+```
+
+## Configuration
+
+**Configuration du vhost nginx :**
+
+```
+server {
+        listen 80;
+        server_name monsite.fr;
+        root /home/monsite/www;
+
+        client_max_body_size 50M;
+
+        location / {
+                index index.php index.html;
+        }
+
+        location /wp-* {
+                return 301 https://$server_name$request_uri;  # enforce https
+        }
+
+        location ~ \.php$ {
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                fastcgi_pass php-handler;
+                fastcgi_index index.php;
+                include fastcgi_params;
+        }
+}
+
+server {
+        listen 443 ssl;
+        server_name monsite.fr;
+        root /home/monsite/www;
+
+        ssl_certificate /etc/ssl/website/monsite.fr;
+        ssl_certificate_key /etc/ssl/website/monsite.key;
+
+        client_max_body_size 50M;
+
+        location /wp-admin {
+                index index.php;
+        }
+
+        location ~ \.php$ {
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                fastcgi_pass php-handler;
+                fastcgi_index index.php;
+                include fastcgi_params;
+                fastcgi_param PHP_VALUE "
+                        post_max_size = 50M
+                        upload_max_filesize = 50M 
+                ";
+        }
+}
+```
+
+## Initialisation Wordpress
+
+Il suffit maintenant de se connecter au site du vhost :
+
+exemple via son IP : 10.0.0.1
+
+Puis suivre les instructions en saisissant les informations de connection à la base de données.
+
+
 
 	-------------------------
 	Ajout d'un Vhost
@@ -51,54 +121,6 @@ Mise en place du wordpress:
 
         Exemple avec Nginx:
 
-                    server {
-                            listen 80;
-                            server_name monsite.fr;
-                            root /home/monsite/www;
-
-                            client_max_body_size 50M;
-
-                            location / {
-                                    index index.php index.html;
-                            }
-
-                            location /wp-* {
-                                    return 301 https://$server_name$request_uri;  # enforce https
-                            }
-
-                            location ~ \.php$ {
-                                    fastcgi_split_path_info ^(.+\.php)(/.+)$;
-                                    fastcgi_pass php-handler;
-                                    fastcgi_index index.php;
-                                    include fastcgi_params;
-                            }
-                    }
-
-                    server {
-                            listen 443 ssl;
-                            server_name monsite.fr;
-                            root /home/monsite/www;
-
-                            ssl_certificate /etc/ssl/website/monsite.fr;
-                            ssl_certificate_key /etc/ssl/website/monsite.key;
-
-                            client_max_body_size 50M;
-
-                            location /wp-admin {
-                                    index index.php;
-                            }
-
-                            location ~ \.php$ {
-                                    fastcgi_split_path_info ^(.+\.php)(/.+)$;
-                                    fastcgi_pass php-handler;
-                                    fastcgi_index index.php;
-                                    include fastcgi_params;
-                                    fastcgi_param PHP_VALUE "
-                                            post_max_size = 50M
-                                            upload_max_filesize = 50M 
-                                    ";
-                            }
-                    }
  
 
 	-------------------------
