@@ -111,12 +111,63 @@ Il suffit maintenant de se connecter au site du vhost :
 
 exemple via son IP : 10.0.0.1
 
-Puis suivre les instructions en saisissant les informations de connection à la base de données.
+Puis suivre les instructions en saisissant les informations de connexion à la base de données.
 
 
+## Configuration de base
 
-	-------------------------
-	Ajout d'un Vhost
+**Configurer la taille d'upload (indispensable) :**
+
+Sources : 
+
+- [Wordpress](http://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP)
+- [Tuto](https://www.wpbeginner.com/wp-tutorials/how-to-fix-the-link-you-followed-has-expired-error-in-wordpress/#aioseo-method-1-increasing-limits-in-the-functions-php-file)
+
+Exemples :
+
+```
+vim /var/www/wordpress/wp-config.php
+
+/* Add any custom values between this line and the "stop editing" line. */
+
+define( 'WP_MEMORY_LIMIT', '256M' );
+define( 'WP_MAX_MEMORY_LIMIT', '256M' );
+
+vim /etc/php/8.2/fpm/php.ini
+
+#(Les variables sont déjà présentes)
+memory_limit = 256M
+upload_max_filesize = 128M
+post_max_size = 128M
+max_execution_time = 300
+
+#Note vérifier également la partie cli si nécessaire pour lors de l'utilisation de scripts
+# ./cli/php.ini
+# " CLI is used for executing PHP scripts from the command line, while FPM is designed to work with web servers like Apache or Nginx to handle PHP scripts more efficiently."
+```
+
+**Appliquer les changements :**
+
+```
+systemctl restart php8.2-fpm && systemctl status php8.2-fpm
+systemctl restart nginx && systemctl status nginx
+```
+
+## Plugins
+
+Note : pour uploader manuellement un plugin il faudra bien configurer la limite d'upload autorisé
+
+Au risque d'avoir un message d'erreur du type "The Link You Followed Has Expired".
+
+**Pour custom son site :**
+
+https://wordpress.org/plugins/elementor/
+
+Note : fonctionne bien avec le theme "Hello Elementor".
+
+
+## Old doc :
+
 	-------------------------
 
         Exemple avec Nginx:

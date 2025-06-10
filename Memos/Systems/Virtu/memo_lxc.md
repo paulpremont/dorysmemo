@@ -493,6 +493,19 @@ Pour le manipuler voir le tool : btrfs-tools
 
 todo
 
+### Mettre une IP statique
+
+Sources : 
+
+- [Forum](https://askubuntu.com/questions/1087073/lxc-3-0-2-equivalent-of-lxc-network-type-veth)
+- [Man page](https://linuxcontainers.org/lxc/manpages/man5/lxc.container.conf.5.html)
+
+```
+vim /var/lib/lxc/nom-ct/config
+
+lxc.net.0.ipv4.address = 10.0.10.5/24
+```
+
 Troubleshooting
 -----------------------------
 

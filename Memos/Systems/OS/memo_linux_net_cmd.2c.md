@@ -1009,9 +1009,10 @@ Préférons :
                         Connexion auto (coté client)
                         ``````````````````````
 
-                            > ssh-keygen -t rsa  :  générer une clé privée et public dans ~/.ssh
-                            > ssh-copy-id -i id_rsa.pub <login>@<ip>
-                                ssh-copy-id -i id_rsa.pub "-p 14521 <login>@<ip>"  : si besoin du port
+ssh-keygen -t ed25519 -a 100 : générer une clé privée et public dans ~/.ssh
+
+                            > ssh-copy-id -i id_ed25.pub <login>@<ip>
+                                ssh-copy-id -i id_ed25.pub "-p 14521 <login>@<ip>"  : si besoin du port
 
                             En fait cette manipulation copie la clé publique sur le serveur distant.
                             Cette clé est copié dans le fichier "authorized_keys"
@@ -1026,10 +1027,10 @@ Préférons :
 
                             Pour le faire à la main (à faire sur l'hôte distant)
 
-                                > scp id_rsa.pub login@host:.ssh/
+                                > scp id_ed25.pub login@host:.ssh/
                                 > ssh login@host
                                 > cd .ssh
-                                > cat id_rsa.pub >> authorized_keys
+                                > cat id_ed25.pub >> authorized_keys
                                 > chmod 600 authorized_keys
 
                             know_hosts:
