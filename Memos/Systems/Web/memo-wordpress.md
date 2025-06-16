@@ -62,6 +62,8 @@ server {
 
         server_name _;
 
+        client_max_body_size 128M;
+
        	location / {
               try_files $uri $uri/ =404;
         }
