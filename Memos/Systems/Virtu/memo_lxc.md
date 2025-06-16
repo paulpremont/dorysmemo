@@ -364,6 +364,32 @@ Son adresse IP :
 
     ln -s /var/lib/lxc/CONTENEUR/config /etc/lxc/auto/CONTENEUR
 
+### Copier et archiver un conteneur
+
+source : https://stackoverflow.com/questions/23427129/how-do-i-backup-move-lxc-containers
+
+```
+# Shutdown the container :
+
+lxc-stop -n $NAME
+
+# Archive container rootfs & config (numeric-owner mandatory to reboot the CT) :
+
+cd /var/lib/lxc/$NAME/
+tar --numeric-owner -czvf container_fs.tar.gz ./*
+
+# Copy the file to your new server :
+
+rsync -avh container_fs.tar.gz user@newserver:/var/lib/lxc/
+
+# Extract rootfs :
+
+mkdir /var/lib/lxc/$NAME/
+cd /var/lib/lxc/$NAME/
+tar --numeric-owner -xzvf container_fs.tar.gz .
+
+```
+
 Configurer un conteneur
 -----------------------------
 
