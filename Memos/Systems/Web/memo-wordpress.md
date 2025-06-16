@@ -7,7 +7,7 @@
 - [Wordpress forum install](https://wordpress.org/support/forum/installation/)
 - [Tuto hostinger](https://www.hostinger.com/fr/tutoriels/wordpress-nginx)
 
-## Installation
+## Installation rapide (testing)
 
 
 **Installation des paquets :**
@@ -21,13 +21,7 @@ apt install nginx mariadb-server wget
 ```
 wget https://wordpress.org/latest.tar.gz
 tar -zxvf latest.tar.gz -C /var/www
-chown -R www-data: wordpress/
-```
-
-**Sécurisation de la base de données :**
-
-```
-sudo mysql_secure_installation
+chown -R www-data: /var/www/wordpress/
 ```
 
 **Création de la base :**
@@ -50,62 +44,45 @@ Installation des paquets php (version à adapter, faire un search avant pour voi
 sudo apt install php8.2-cli php8.2-fpm php8.2-mysql php8.2-opcache php8.2-mbstring php8.2-xml php8.2-gd php8.2-curl
 ```
 
-## Configuration
+### Configuration
 
 **Configuration du vhost nginx :**
 
 ```
+vim /etc/nginx/sites-available/default
+```
+
+
+```
 server {
-        listen 80;
-        server_name monsite.fr;
-        root /home/monsite/www;
+        listen 80 default_server;
+        root /var/www/wordpress;
 
-        client_max_body_size 50M;
+        index index.php;
 
-        location / {
-                index index.php index.html;
-        }
+        server_name _;
 
-        location /wp-* {
-                return 301 https://$server_name$request_uri;  # enforce https
+       	location / {
+              try_files $uri $uri/ =404;
         }
 
         location ~ \.php$ {
-                fastcgi_split_path_info ^(.+\.php)(/.+)$;
-                fastcgi_pass php-handler;
-                fastcgi_index index.php;
-                include fastcgi_params;
-        }
-}
+              include snippets/fastcgi-php.conf;
 
-server {
-        listen 443 ssl;
-        server_name monsite.fr;
-        root /home/monsite/www;
-
-        ssl_certificate /etc/ssl/website/monsite.fr;
-        ssl_certificate_key /etc/ssl/website/monsite.key;
-
-        client_max_body_size 50M;
-
-        location /wp-admin {
-                index index.php;
-        }
-
-        location ~ \.php$ {
-                fastcgi_split_path_info ^(.+\.php)(/.+)$;
-                fastcgi_pass php-handler;
-                fastcgi_index index.php;
-                include fastcgi_params;
-                fastcgi_param PHP_VALUE "
-                        post_max_size = 50M
-                        upload_max_filesize = 50M 
-                ";
+              # With php-fpm (or other unix sockets):
+              fastcgi_pass unix:/run/php/php8.2-fpm.sock;
         }
 }
 ```
 
-## Initialisation Wordpress
+**Contrôle des services :**
+
+```
+systemctl restart php8.2-fpm && systemctl status php8.2-fpm
+systemctl restart nginx && systemctl status nginx
+```
+
+### Initialisation Wordpress
 
 Il suffit maintenant de se connecter au site du vhost :
 
@@ -164,6 +141,45 @@ Au risque d'avoir un message d'erreur du type "The Link You Followed Has Expired
 https://wordpress.org/plugins/elementor/
 
 Note : fonctionne bien avec le theme "Hello Elementor".
+
+## Sécurisation wordpress (todo)
+
+```
+server {
+        listen 80 default_server;
+        ...
+
+        location /wp-* {
+                return 301 https://$server_name$request_uri;  # enforce https
+        }
+}
+
+server {
+        listen 443 ssl;
+        server_name monsite.fr;
+        root /home/monsite/www;
+
+        ssl_certificate /etc/ssl/website/monsite.fr;
+        ssl_certificate_key /etc/ssl/website/monsite.key;
+
+        client_max_body_size 50M;
+
+        location /wp-admin {
+                index index.php;
+        }
+
+        location ~ \.php$ {
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                fastcgi_pass php-handler;
+                fastcgi_index index.php;
+                include fastcgi_params;
+                fastcgi_param PHP_VALUE "
+                        post_max_size = 50M
+                        upload_max_filesize = 50M 
+                ";
+        }
+}
+```
 
 
 ## Old doc :
