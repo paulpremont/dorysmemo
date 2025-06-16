@@ -88,7 +88,13 @@ Il suffit maintenant de se connecter au site du vhost :
 
 exemple via son IP : 10.0.0.1
 
-Puis suivre les instructions en saisissant les informations de connexion à la base de données.
+Suivre les instructions en saisissant les informations de connexion à la base de données.
+
+Enfin, modifier le nom de l'URL wordpress pour faciliter l'accès au site sans son IP :
+
+**Réglages > Général > Adresse web à modifier**
+
+Changer l'IP par un nom d'hôte.
 
 
 ## Configuration de base

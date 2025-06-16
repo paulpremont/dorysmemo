@@ -55,6 +55,18 @@ sudo lxc-copy -n monCT -N monCT2
 sudo lxc-destroy -n monCT
 ```
 
+## Configurations pratiques
+
+**Mettre une IP fixe :**
+
+```
+sudo su -
+cd /var/lib/lxc/monCT
+vim config
+
+  lxc.net.0.ipv4.address = 10.0.10.12/24
+```
+
 
 ## Installation manuelle (archive)
 
