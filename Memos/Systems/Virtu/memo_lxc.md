@@ -1,29 +1,19 @@
-L X C
-==============================
+# L X C
 
-Links
------------------------------
-
-### Docs:
+## Links
 
 * [site offciel](https://linuxcontainers.org/)
 * [wikipedia](http://fr.wikipedia.org/wiki/Cgroups#mediaviewer/Fichier:Linux_kernel_unified_hierarchy_cgroups_and_systemd.svg1)
-
-### Wiki/Tutos:
-
 * [wiki debian](https://wiki.debian.org/LXC)
 * [docs oracle](http://docs.oracle.com/cd/E37670_01/E37355/html/ol_config_os_containers.html)
 
-
-What is it ?
------------------------------
+## What is it ?
 
 LXC pour Linux Containers est une sorte de chroot gonflé aux hormones de taureaux permetant de créer plusieurs sous-tables de processus et créer des conteneurs système ou applicatif.
 
 Il a l'avantage d'être plus légé que de la virtualisation mais partage le noyau de l'hôte avec tous les autres conteneurs.
 
-How it works ?
------------------------------
+## How it works ?
 
 Il fournit une API et un set d'outils permettant de dialoguer avec la couche kernel utilisant notament :
 
@@ -52,29 +42,45 @@ sudo lxc-start -n NomConteneur
 sudo lxc-attach -n NomConteneur
 ```
 
-Installation
------------------------------
+## Les commandes essentielles
+
+```
+#Stopper (pour manipuler) :
+sudo lxc-stop -n monCT
+
+#Copier :
+sudo lxc-copy -n monCT -N monCT2
+
+#Supprimer :
+sudo lxc-destroy -n monCT
+```
+
+
+## Installation manuelle (archive)
 
 ### Sous Debian
-    apt-get install lxc bridge-utils libvirt-bin debootstrap
 
-### Depuis les sources:
-    git clone git://github.com/lxc/lxc
+```
+apt-get install lxc bridge-utils libvirt-bin debootstrap
+```
 
-Configuration (optionel)
------------------------------
+### Depuis les sources
 
-### Préparation de l'hôte
+```
+git clone git://github.com/lxc/lxc
+```
+
+## Configuration (optionel)
+
+### Préparation de l'hôte
 
 cgroup: limiter/compter et isoler l'utilisation des ressources
 
     vim /etc/fstab
 
-<!-- vim -->
 
     cgroup  /sys/fs/cgroup  cgroup  defaults  0   0
 
-<!-- -->
 
     mount /sys/fs/cgroup
 
