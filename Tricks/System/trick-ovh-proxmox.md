@@ -109,5 +109,57 @@ cat /proc/sys/net/ipv6/conf/all/disable_ipv6
 cat /proc/sys/net/ipv4/ip_forward
 
 # Configuration iptables
+# Copier et adapter la source : https://github.com/paulpremont/dorysmemo/blob/main/Memos/Systems/Security/firewall-example.sh
+cp firewall-example.sh /etc/init.d/firewall
+chmod +x /etc/init.d/firewall
+/etc/init.d/firewall test
+update-rc.d firewall defaults
+#pour supprimer : update-rc.d -f firewall remove
 
 #Configuration de fail2ban
+cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+#Adapter en conséquence
+```
+
+**Mise à jour auto**
+
+```
+# Mise à jour de sécurité automatique
+apt install cron-apt
+
+# Séparer les sources concernant les dépôts de sécurité dans un fichier distinct :
+cp /etc/apt/sources.list.d/debian.sources /etc/apt/sources.list.d/debian-security.sources
+# Éditer les fichiers en conséquence
+
+vim /etc/cron-apt/config
+# Configuration for cron-apt. For further information about the possible
+# configuration settings see /usr/share/doc/cron-apt/README.gz.
+
+  APTCOMMAND=/usr/bin/apt-get
+  OPTIONS="-o quiet=1 -o Dir::Etc::SourceList=/etc/apt/sources.list.d/debian-security.sources"
+  MAILTO="foouser@foodomain.fr"
+  MAILON="upgrade"
+
+vim /etc/cron-apt/action.d/3-download
+
+  autoclean -y
+  #on supprime l'option -d par défaut pour que la mise à jour soit appliquée
+  dist-upgrade -y -o APT::Get::Show-Upgraded=true
+
+#vérifier l'application en crontab
+cat /etc/cron.d/cron-apt
+
+#tester
+cron-apt
+cat /var/log/cron-apt/log
+```
+
+**IDS**
+
+```
+apt install rkhunter
+vim /etc/default/rkhunter
+
+  CRON_DAILY_RUN="yes"
+  REPORT_EMAIL="foouser@foodomain.fr"
+```
