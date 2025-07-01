@@ -154,6 +154,48 @@ cron-apt
 cat /var/log/cron-apt/log
 ```
 
+**MTA**
+```
+#Configuration d'un MTA pour l'envoi d'email depuis le système
+#source : https://fr.ittrip.xyz/linux/using-email-commands-in-linux
+#https://serverfault.com/questions/221696/ssmtp-change-from-root-xycom-root-name
+#choix de ssmtp pour disposer d'un MTA simple d'envoie d'email depuis un service externe
+
+apt install ssmtp
+cp /etc/ssmtp/ssmtp.conf /etc/ssmtp/ssmtp.origin.conf
+vim /etc/ssmtp/ssmtp.conf
+
+  # Configuration pour le serveur SMTP
+  #mailhub=smtp.example.com:587
+  mailhub=smtp.example.com:465
+
+  # Nom d'utilisateur et mot de passe du serveur SMTP
+  AuthUser=votre_utilisateur@example.com
+  AuthPass=votre_mot_de_passe
+
+  # Adresse email de l'expéditeur
+  FromLineOverride=YES
+  rewriteDomain=example.com
+
+  # Réglez ce qui suit pour l'utilisation de SSL/TLS
+  #UseSTARTTLS=YES
+  UseTLS=YES
+
+vim /etc/ssmtp/
+
+  root:monexpediteur@mondomain.com
+
+# Test
+
+echo -e 'Subject: test\n\nTesting ssmtp' | sendmail -v support@mondomaine.com
+
+# Note : il est possible de changer le nom de l'utilisateur du from via /etc/password
+# Exemple :
+
+vim /etc/passwd
+  root:x:0:0:YOUR NAME HERE,,,:/root:/bin/bash
+```
+
 **IDS**
 
 ```
@@ -162,4 +204,27 @@ vim /etc/default/rkhunter
 
   CRON_DAILY_RUN="yes"
   REPORT_EMAIL="foouser@foodomain.fr"
+
+rkhunter --propupd
+```
+
+**Logs**
+```
+apt install logwatch
+cp /usr/share/logwatch/default.conf/logwatch.conf /etc/logwatch/conf/logwatch.conf
+vim /etc/logwatch/conf/logwatch.con
+
+  Format = html
+  MailTo = moi@mondomaine.fr
+  Detail = Med
+```
+
+**SSH alerte**
+```
+vim /etc/profile
+
+echo "Objet : Alerte connexion SSH.
+Serveur : `hostname`
+Date : `date`
+`who` " | mail -s "`hostname` connexion ssh de : `who | cut -d"(" -f2 | cut -d")" -f1`" moi@mondomaine.fr
 ```
