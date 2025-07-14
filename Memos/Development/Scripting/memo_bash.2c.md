@@ -407,6 +407,8 @@ Traitement des arguments
 
                 ${!variable_n} : affiche l'argument d'indice $variable_n
 
+    Pour accéder au dernier argument : ${!#}
+
 	-----------------------------------------
 	Code de sortie
 	-----------------------------------------
