@@ -1,13 +1,21 @@
-=============================================================
-	U S B     L I V E     B O O T A B L E
-=============================================================
+# Media bootable
 
-Pour une iso:
+## Sources
 
-Links:
-        http://wiki.debian-facile.org/doc:install:usb-boot
-        http://admincloud.net/116/creer-une-cle-usb-bootable-de-windows-sous-linux/
+- https://doc.ubuntu-fr.org/dd
+- http://wiki.debian-facile.org/doc:install:usb-boot
+- http://admincloud.net/116/creer-une-cle-usb-bootable-de-windows-sous-linux/
 
+## Via dd
+
+```
+df #repérer la partition cible
+dd if=pve-cd.iso of=/dev/XYZ bs=4k status=progress
+```
+
+## Via un utilitaire
+
+(à revérifier)
 
 apt-get install syslinux mtools mbr gparted
 
@@ -15,7 +23,7 @@ En mode custom:
         dd if=image.iso of=/dev/sdX (pas la partition mais le volume ne entier)
         
         ex:
-            dd if=pve-cd.iso of=/dev/XYZ bs=1M
+            dd if=pve-cd.iso of=/dev/XYZ bs=4k status=progress
 
 
 > sudo add-apt-repository ppa:gezakovacs/ppa && sudo apt-get update && sudo apt-get install unetbootin

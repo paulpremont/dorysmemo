@@ -44,6 +44,13 @@ Installation des paquets php (version à adapter, faire un search avant pour voi
 sudo apt install php8.2-cli php8.2-fpm php8.2-mysql php8.2-opcache php8.2-mbstring php8.2-xml php8.2-gd php8.2-curl
 ```
 
+**Certificat SSL self signed**
+
+```
+mkdir /etc/nginx/ssl
+openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout /etc/nginx/ssl/private.key -out /etc/nginx/ssl/certificate.crt
+```
+
 ### Configuration
 
 **Configuration du vhost nginx :**
@@ -55,8 +62,11 @@ vim /etc/nginx/sites-available/default
 
 ```
 server {
-        listen 80 default_server;
+        listen 443 ssl default_server;
         root /var/www/wordpress;
+
+      	ssl_certificate /etc/nginx/ssl/certificate.crt;
+	      ssl_certificate_key /etc/nginx/ssl/private.key;
 
         index index.php;
 
@@ -149,6 +159,27 @@ Au risque d'avoir un message d'erreur du type "The Link You Followed Has Expired
 https://wordpress.org/plugins/elementor/
 
 Note : fonctionne bien avec le theme "Hello Elementor".
+
+## Police
+
+## Sécurité
+
+## Wp login
+
+## duplicator
+
+Fichiers à supprimer :
+
+
+    dup-installer
+    installer.php
+    installer-backup.php
+    dup-installer-bootlog__[HASH].txt
+    archive.zip/daf
+
+
+## SEO
+
 
 ## Sécurisation wordpress (todo)
 

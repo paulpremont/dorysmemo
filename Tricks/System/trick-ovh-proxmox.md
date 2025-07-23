@@ -228,3 +228,81 @@ Serveur : `hostname`
 Date : `date`
 `who` " | mail -s "`hostname` connexion ssh de : `who | cut -d"(" -f2 | cut -d")" -f1`" moi@mondomaine.fr
 ```
+
+**Accès admin proxmox**
+```
+ssh -L 8006:127.0.0.1:8006 monserveur
+```
+
+Puis accéder à https://127.0.0.1:8006
+
+**Chiffrement ZFS en mode mirroir**
+```
+#identifier les partitions de données
+fdisk -l
+zpool status -v data
+
+#supprimer le pool zfs non chiffré
+zfs list
+sudo zfs set mountpoint=none data
+sudo zfs set mountpoint=none data/zd0
+zpool destroy data
+zfs list
+
+#créer le nouveau pool zfs
+sudo zpool create -f -o ashift=12 data mirror /dev/nvme0n1p5 /dev/nvme1n1p5
+sudo zfs set mountpoint=none data
+sudo zfs create -o encryption=on -o keylocation=prompt -o keyformat=passphrase data/zd0
+sudo zfs set mountpoint=/var/lib/vz data/zd0
+zfs list
+  NAME       USED  AVAIL  REFER  MOUNTPOINT
+  data       944K   899G    96K  none
+  data/zd0   248K   899G   248K  /var/lib/vz
+
+sudo zfs mount -l data/zd0
+df -h
+  data/zd0       942931840     128 942931712   1% /var/lib/vz
+zfs list -o name,mountpoint,mounted,my.custom:property
+
+reboot
+#Note : il est possible de suivre la séquence de boot via le KVM en ligne de votre serveur
+sudo zfs mount -l data/zd0
+zfs list -o name,mountpoint,mounted,my.custom:property
+df -h
+
+# /!\ regarder également sur l'interface de proxmox si la partie storage correspond bien.
+# Attention à ne pas manipuler des VM lorsque le point de montage n'est pas réalisé
+
+ls -lR /var/lib/vz
+/var/lib/vz:
+total 20
+drwxr-xr-x 2 root root 4096 Jul  1 16:54 dump
+drwxr-xr-x 2 root root 4096 Jul  1 16:54 images
+drwxr-xr-x 2 root root 4096 Jul  1 16:54 private
+drwxr-xr-x 2 root root 4096 Jul  1 16:54 snippets
+drwxr-xr-x 4 root root 4096 Jul  1 16:54 template
+```
+
+**Configuration utilisateurs proxmox**
+
+Aller sur proxmox : localhost:8006 > Datacenter > Permissions
+
+1. Créer un groupe
+2. Ajouter permission administrator groupe
+3. Ajouter un utilisateur pam
+
+Note : il n'est pas conseillé sur proxmox de désactiver l'utilisateur root au risque de perdre certaines fonctionnalités
+
+
+**Réseau des VM**
+
+Aller sur proxmox : localhost:8006 > non-serveur > 
+
+
+**Première VM**
+
+
+**Accès VPN Wiregard**
+
+```
+```
