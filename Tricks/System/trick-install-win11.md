@@ -8,6 +8,8 @@
 
 ## Télécharger l'image Windows 11
 
+https://www.microsoft.com/fr-fr/software-download/windows11
+
 "Télécharger l’image disque Windows 11 (ISO) pour les appareils x64" :
 
 Cliquez sur télécharger et sélectionner votre langue d'installation puis "Confirmer".
