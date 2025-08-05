@@ -81,7 +81,7 @@ apt install net-tools
 
 **Premier niveau de sécurisation :
 
-```
+``
 #changement du mdp root
 sudo su -
 password
@@ -288,7 +288,7 @@ drwxr-xr-x 4 root root 4096 Jul  1 16:54 template
 Aller sur proxmox : localhost:8006 > Datacenter > Permissions
 
 1. Créer un groupe
-2. Ajouter permission administrator groupe
+2. Ajouter permission administrator group
 3. Ajouter un utilisateur pam
 
 Note : il n'est pas conseillé sur proxmox de désactiver l'utilisateur root au risque de perdre certaines fonctionnalités
@@ -296,13 +296,70 @@ Note : il n'est pas conseillé sur proxmox de désactiver l'utilisateur root au 
 
 **Réseau des VM**
 
-Aller sur proxmox : localhost:8006 > non-serveur > 
+Aller sur proxmox : localhost:8006 
+  * Datacenter > non-serveur > System > Network
 
+Créer une nouvelle interface de type bridge dans le réseau souhaité.
 
-**Première VM**
+Exemple : 10.100.0.254/24
+
+Créer une règle de NAT pour que ce réseau puisse sortir vers internet (ou passer par un proxy).
+
+sources : 
+
+- https://pve.proxmox.com/wiki/Network_Configuration
+- https://rdr-it.com/proxmox-creer-un-reseau-prive-avec-du-nat/
+- https://wiki.abyssproject.net/fr/proxmox/proxmox-with-one-public-ip
+
+Exemple de régle NAT :
+
+```
+# On vérifie que le forwarding est activé :
+cat /proc/sys/net/ipv4/ip_forward
+
+# On ajoute la règle de NAT sur l'interface qui porte l'IP Publique
+
+iptables -t nat -A POSTROUTING -s '10.0.0.0/24' -o vmbr0 -j MASQUERADE
+# à vérifier si réellement nécessaire :
+# iptables -t raw -I PREROUTING -i fwbr+ -j CT --zone 1
+# echo 1 > /proc/sys/net/ipv4/conf/eno1/proxy_arp
+
+# -A FORWARD -s 10.0.0.0/24 -i vmbr1 -o vmbr0 -j ACCEPT
+# -A FORWARD -d 10.0.0.0/24 -i vmbr0 -o vmbr1 -j ACCEPT
+```
+
+**Première VM (préparation d'un template)**
+
+1. Uploader une image d'installation
+2. Create VM
+  * bien selectionner la carte réseau virtuelle associée au réseau des VM (exemple vmbr1)
+  * Préferez un partitionnement du disque en LVM avec /var, /tmp et /home séparés
+  * confirmer
+3. Démarrer la VM (double cliquer sur la nouvelle VM) puis "start"
+  * une nouvelle fenêtre s'ouvre
+
+**Configuration d'une VM :**
+
+* configuration des sources
+* ajout des paquets (vim, sudo, fail2ban...)
+* ajout des certificats
+* configuration iptables
+* sécurisation de ssh (clé ssh + agent)
+* ajout d'un proxy (nécessire un proxy préalable)
+
+**Rediriger du flux vers une VM**
+
+```
+iptables -t nat -A PREROUTING -i vmbr0 -p tcp --dport 222 -j DNAT --to 10.99.99.1:22
+# iptables -t nat -D POSTROUTING 2
+# 
+
+```
 
 
 **Accès VPN Wiregard**
 
 ```
 ```
+
+**Résizer le disque d'une VM :**
