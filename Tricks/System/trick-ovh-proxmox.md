@@ -23,8 +23,8 @@ vim /home/foouser/.ssh/authorized_keys
 chown -R foouser: /home/foouser/.ssh
 chmod 600 /home/foouser/.ssh/authorized_keys
 
-#On test l'accès
-ssh foouser@fooserver
+#On test l'accès sur le client
+ssh -i ssh-priv-key foouser@fooserver
 
 #on retire root de l'accès ssh et on change le port
 #(https://fr.wikipedia.org/wiki/Liste_de_ports_logiciels)
@@ -79,9 +79,9 @@ apt install net-tools
 #copier éventuellement vimrc, bashrc et motd
 ```
 
-**Premier niveau de sécurisation :
+**Premier niveau de sécurisation :**
 
-``
+```
 #changement du mdp root
 sudo su -
 password
@@ -106,15 +106,20 @@ sysctl -p
 
 # Vérifier:
 cat /proc/sys/net/ipv6/conf/all/disable_ipv6
+1
 cat /proc/sys/net/ipv4/ip_forward
+1
 
 # Configuration iptables
 # Copier et adapter la source : https://github.com/paulpremont/dorysmemo/blob/main/Memos/Systems/Security/firewall-example.sh
-cp firewall-example.sh /etc/init.d/firewall
-chmod +x /etc/init.d/firewall
-/etc/init.d/firewall test
-update-rc.d firewall defaults
-#pour supprimer : update-rc.d -f firewall remove
+cp firewall-example.sh /etc/init.d/firewall.sh
+chmod +x /etc/init.d/firewall.sh
+/etc/init.d/firewall.sh test
+update-rc.d firewall.sh defaults
+#pour supprimer : update-rc.d -f firewall.sh remove
+
+# Ou utiliser iptables-persistent :
+# https://romain.therrat.fr/posts/2013/04/iptables-rendre-ses-regles-persistantes-sous-gnudebian-avec-iptable-persistent/
 
 #Configuration de fail2ban
 cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
@@ -149,6 +154,13 @@ vim /etc/cron-apt/action.d/3-download
 #vérifier l'application en crontab
 cat /etc/cron.d/cron-apt
 
+# Every night at 4 o'clock.
+0 4	* * *	root	test -x /usr/sbin/cron-apt && /usr/sbin/cron-apt
+# Every hour.
+# 0 *	* * *	root	test -x /usr/sbin/cron-apt && /usr/sbin/cron-apt /etc/cron-apt/config2
+# Every five minutes.
+# */5 *	* * *	root	test -x /usr/sbin/cron-apt && /usr/sbin/cron-apt /etc/cron-apt/config2
+
 #tester
 cron-apt
 cat /var/log/cron-apt/log
@@ -181,7 +193,7 @@ vim /etc/ssmtp/ssmtp.conf
   #UseSTARTTLS=YES
   UseTLS=YES
 
-vim /etc/ssmtp/
+vim /etc/ssmtp/revaliases
 
   root:monexpediteur@mondomain.com
 
@@ -190,10 +202,11 @@ vim /etc/ssmtp/
 echo -e 'Subject: test\n\nTesting ssmtp' | sendmail -v support@mondomaine.com
 
 # Note : il est possible de changer le nom de l'utilisateur du from via /etc/password
+# Optionnel et surement à éviter
 # Exemple :
 
-vim /etc/passwd
-  root:x:0:0:YOUR NAME HERE,,,:/root:/bin/bash
+# vim /etc/passwd
+#  root:x:0:0:YOUR NAME HERE,,,:/root:/bin/bash
 ```
 
 **IDS**
@@ -212,11 +225,12 @@ rkhunter --propupd
 ```
 apt install logwatch
 cp /usr/share/logwatch/default.conf/logwatch.conf /etc/logwatch/conf/logwatch.conf
-vim /etc/logwatch/conf/logwatch.con
+vim /etc/logwatch/conf/logwatch.conf
 
   Format = html
   MailTo = moi@mondomaine.fr
-  Detail = Med
+  Detail = Low
+  mailer = "/usr/sbin/sendmail -t"
 ```
 
 **SSH alerte**
@@ -236,39 +250,65 @@ ssh -L 8006:127.0.0.1:8006 monserveur
 
 Puis accéder à https://127.0.0.1:8006
 
-**Chiffrement ZFS en mode mirroir**
+**Chiffrement ZFS en mode mirroir sur une instance vierge**
 ```
 #identifier les partitions de données
+sudo su -
 fdisk -l
 zpool status -v data
 
+# Bien noter les noms de partition
+
+# Désactiver le Storage et supprimer /var/liv/vz
+# 127.0.0.1:8006 > Datacenter > Storage > Editer le storage par défaut > Décocher Enable
+rm -Rf /var/lib/vz
+mkdir /var/lib/vz
+ls /var/lib/vz
+# il doit être vide
+
 #supprimer le pool zfs non chiffré
 zfs list
-sudo zfs set mountpoint=none data
-sudo zfs set mountpoint=none data/zd0
+zfs set mountpoint=none data
+zfs set mountpoint=none data/zd0
 zpool destroy data
 zfs list
+no datasets available
 
-#créer le nouveau pool zfs
-sudo zpool create -f -o ashift=12 data mirror /dev/nvme0n1p5 /dev/nvme1n1p5
-sudo zfs set mountpoint=none data
-sudo zfs create -o encryption=on -o keylocation=prompt -o keyformat=passphrase data/zd0
-sudo zfs set mountpoint=/var/lib/vz data/zd0
+#créer le nouveau pool zfs (data2)
+zpool create -f -o ashift=12 data2 mirror /dev/nvme0n1p5 /dev/nvme1n1p5
+zfs set mountpoint=none data2
+zfs create -o encryption=on -o keylocation=prompt -o keyformat=passphrase data2/zd0
+zfs set mountpoint=/var/lib/vz data2/zd0
 zfs list
   NAME       USED  AVAIL  REFER  MOUNTPOINT
-  data       944K   899G    96K  none
-  data/zd0   248K   899G   248K  /var/lib/vz
+  data2       944K   899G    96K  none
+  data2/zd0   248K   899G   248K  /var/lib/vz
 
-sudo zfs mount -l data/zd0
+zfs mount -l data2/zd0
 df -h
-  data/zd0       942931840     128 942931712   1% /var/lib/vz
+  data2/zd0       942931840     128 942931712   1% /var/lib/vz
+
 zfs list -o name,mountpoint,mounted,my.custom:property
+
+NAME      MOUNTPOINT   MOUNTED  MY.CUSTOM:PROPERTY
+data2      none         no       -
+data2/zd0  /var/lib/vz  yes      -
+
 
 reboot
 #Note : il est possible de suivre la séquence de boot via le KVM en ligne de votre serveur
-sudo zfs mount -l data/zd0
+sudo zfs mount -l data2/zd0
+# saisir le mdp zfs
 zfs list -o name,mountpoint,mounted,my.custom:property
 df -h
+
+# Réactiver le storage sur proxmox
+# 127.0.0.1:8006 > Datacenter > Storage > Editer le storage par défaut > Cocher Enable
+ls /var/liv/vz
+dump  images  private  snippets  template
+# La partie zfs doit également être branchée sur data2
+# 127.0.0.1:8006 > nomServeur > ZFS > data2
+
 
 # /!\ regarder également sur l'interface de proxmox si la partie storage correspond bien.
 # Attention à ne pas manipuler des VM lorsque le point de montage n'est pas réalisé
@@ -302,6 +342,7 @@ Aller sur proxmox : localhost:8006
 Créer une nouvelle interface de type bridge dans le réseau souhaité.
 
 Exemple : 10.100.0.254/24
+
 
 Créer une règle de NAT pour que ce réseau puisse sortir vers internet (ou passer par un proxy).
 

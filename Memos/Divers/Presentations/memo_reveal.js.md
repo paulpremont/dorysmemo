@@ -12,8 +12,8 @@ Links
 
 ### Official
 
-* [Site web](http://lab.hakim.se/reveal-js/#/)
-* [Projet Git et documentation](https://github.com/hakimel/reveal.js/)
+* [Site Web](https://revealjs.com/)
+* [Sources github](https://github.com/hakimel/reveal.js/)
 
 ### Tutos
 
@@ -67,9 +67,11 @@ Installation
 
 ### Reveal.js :
 
-    git clone https://github.com/hakimel/reveal.js.git
-    cd reveal.js
-    npm install
+```
+git clone https://github.com/hakimel/reveal.js.git
+cd reveal.js
+npm install
+```
 
 ### Exemple en mode serveur (optionnel) :
 
@@ -98,6 +100,22 @@ voir :
 
 Configuration
 -----------------------------
+
+### Accès
+
+Pour modifier le socket et l'arborescence de travail :
+
+```
+vim gulpfile.js
+
+const root = yargs.argv.root || '.'
+const port = yargs.argv.port || 8000
+const host = yargs.argv.host || '0.0.0.0'
+```
+
+Note : c'est le fichier index.html du dossier root qui sera lu en premier.
+
+### Paramètres d'un slide
 
 * [configuration](https://github.com/hakimel/reveal.js#configuration)
 
