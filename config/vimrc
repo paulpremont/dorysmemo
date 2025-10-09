@@ -1,0 +1,30 @@
+set number
+set background=dark
+set ignorecase
+set cursorcolumn
+highlight cursorcolumn ctermbg=black
+set cursorline
+highlight cursorline cterm=none ctermbg=black
+set autoindent
+set backup
+set backupdir=$HOME/.vim/backup/
+set expandtab
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+set fileencoding=utf8
+set colorcolumn=80
+
+" Comment
+"
+set history=400		" keep 50 lines of command line history
+set ruler		" show the cursor position all the time
+set showcmd		" display incomplete commands
+set incsearch		" do incremental searching
+
+" autocmd BufWritePre * %s/\s\+$//e
+
+" Grammalecte
+set nocompatible
+filetype plugin on
+let g:grammalecte_cli_py='$HOME/Software/Grammalecte-fr-v2.1.1/grammalecte-cli.py'
