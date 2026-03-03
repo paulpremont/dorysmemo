@@ -1,0 +1,49 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.5 Chrome/138.0.7204.251 Electron/37.6.1 Safari/537.36" version="28.2.5">
+  <diagram name="Page-1" id="rLjUM0NSm7XLXPN-1-p6">
+    <mxGraphModel dx="2031" dy="650" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="wgJzsc04eQ1RvqHvhftC-3" value="PROJET" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="210" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wgJzsc04eQ1RvqHvhftC-4" value="QUI ?" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-40" y="280" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wgJzsc04eQ1RvqHvhftC-5" value="CONTEXTE" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="280" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wgJzsc04eQ1RvqHvhftC-6" value="PERIMETRE" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="280" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wgJzsc04eQ1RvqHvhftC-7" value="OBJECTIFS" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="480" y="280" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wgJzsc04eQ1RvqHvhftC-8" value="BESOIN" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="90" y="280" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wgJzsc04eQ1RvqHvhftC-9" value="CDCF" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;" vertex="1" parent="1">
+          <mxGeometry x="-122.5" y="370" width="100" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="wgJzsc04eQ1RvqHvhftC-10" value="RACI" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;" vertex="1" parent="1">
+          <mxGeometry x="-2.5" y="370" width="100" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="wgJzsc04eQ1RvqHvhftC-11" value="RISQUES" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;" vertex="1" parent="1">
+          <mxGeometry x="117.5" y="370" width="100" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="wgJzsc04eQ1RvqHvhftC-12" value="MACRO PLANNING" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;" vertex="1" parent="1">
+          <mxGeometry x="232.5" y="370" width="100" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="wgJzsc04eQ1RvqHvhftC-13" value="ROADMAP" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;" vertex="1" parent="1">
+          <mxGeometry x="352.5" y="370" width="100" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="wgJzsc04eQ1RvqHvhftC-14" value="PLAN DE COMM" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;" vertex="1" parent="1">
+          <mxGeometry x="467.5" y="370" width="100" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="wgJzsc04eQ1RvqHvhftC-15" value="BOARD PROJET" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;" vertex="1" parent="1">
+          <mxGeometry x="582.5" y="370" width="100" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
